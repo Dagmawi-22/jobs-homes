@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Fontisto, Ionicons } from "@expo/vector-icons";
+import { primary_color } from "../Config/config";
 const HouseCard = ({ house }) => {
   const isEven = house.id % 2 === 0;
 
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     marginBottom: 10,
     alignItems: "center",
-    marginHorizontal: 10,
+    marginHorizontal: 30,
     padding: 10,
   },
   image: {
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "green",
+    color: primary_color,
     marginBottom: 5,
   },
   location: {
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     paddingVertical: 5,
     paddingHorizontal: 10,
-    backgroundColor: "green",
+    backgroundColor: primary_color,
     borderRadius: 5,
   },
   buttonOutlined: {

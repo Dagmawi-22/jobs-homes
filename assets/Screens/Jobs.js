@@ -6,10 +6,14 @@ import SearchBar from "../Components/Searchbar";
 const dummyJobs = [
   {
     id: 1,
-    title: "Software Engineer",
-    company: "ABC Tech",
-    location: "San Francisco, CA",
+    title: "CTO",
+    company: "Zemen Bank",
+    location: "Addis Ababa, ET",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    companyLogo:
+      "https://pbs.twimg.com/profile_images/1301108895713296385/Z8zbH8NH_400x400.jpg",
+    coverImage:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKOka6UET-L-Fap9BXa1j0LbYqfLHD9vULOAGD665CbQ&s",
   },
   {
     id: 2,
@@ -17,6 +21,10 @@ const dummyJobs = [
     company: "XYZ Inc.",
     location: "New York, NY",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    companyLogo:
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+    coverImage:
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
   },
   {
     id: 3,
@@ -24,6 +32,10 @@ const dummyJobs = [
     company: "ABC Tech",
     location: "San Francisco, CA",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    companyLogo:
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+    coverImage:
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
   },
   {
     id: 4,
@@ -31,6 +43,10 @@ const dummyJobs = [
     company: "XYZ Inc.",
     location: "New York, NY",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    companyLogo:
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+    coverImage:
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
   },
   {
     id: 5,
@@ -38,6 +54,10 @@ const dummyJobs = [
     company: "ABC Tech",
     location: "San Francisco, CA",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    companyLogo:
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+    coverImage:
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
   },
   {
     id: 6,
@@ -45,6 +65,10 @@ const dummyJobs = [
     company: "XYZ Inc.",
     location: "New York, NY",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    companyLogo:
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+    coverImage:
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
   },
 ];
 
