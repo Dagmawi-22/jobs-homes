@@ -24,6 +24,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginHorizontal: 10,
     marginTop: 10,
+    elevation: 2, // Add elevation for box shadow
+    zIndex: 1000,
   },
   icon: {
     fontSize: 20,
