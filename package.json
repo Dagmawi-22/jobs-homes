@@ -8,6 +8,15 @@
     "github": "https://github.com/Dagmawi-22"
   },
   "main": "node_modules/expo/AppEntry.js",
+  "expo": {
+    "android": {
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    }
+  },
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -20,6 +29,7 @@
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "expo": "~50.0.13",
+    "expo-image-picker": "~14.7.1",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
     "react-native": "0.73.5",
