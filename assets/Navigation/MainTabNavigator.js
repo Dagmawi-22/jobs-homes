@@ -5,6 +5,7 @@ import Jobs from "../Screens/Jobs";
 import Houses from "../Screens/Houses";
 import { primary_color } from "../Config/config";
 import { View, TouchableOpacity, Modal, Text, StyleSheet } from "react-native";
+import SelectionComponent from "../Components/JobOrHouse";
 
 const Tab = createBottomTabNavigator();
 
@@ -53,9 +54,8 @@ export default function MainTabNavigator() {
           onPress={handleCloseModal}
         >
           <View style={styles.modalContent}>
-            <TouchableOpacity onPress={handleCloseModal}>
-              <Text style={styles.closeButton}>Close</Text>
-            </TouchableOpacity>
+            <TouchableOpacity onPress={handleCloseModal}></TouchableOpacity>
+            <SelectionComponent />
             {/* Add your Add Form here */}
             {/* For example: <AddForm /> */}
           </View>
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     width: "80%",
     backgroundColor: "white",
     borderRadius: 10,
-    padding: 20,
+    padding: 50,
   },
   closeButton: {
     textAlign: "right",

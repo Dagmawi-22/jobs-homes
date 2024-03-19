@@ -59,6 +59,12 @@ const HouseCard = ({ house }) => {
       ) : (
         <Image source={{ uri: house.image }} style={styles.image} />
       )}
+      <TouchableOpacity
+        style={styles.rightArrow}
+        onPress={() => console.log("Navigate to house details")}
+      >
+        <Text style={{ color: primary_color, fontSize: 24 }}>➔</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -131,6 +137,11 @@ const styles = StyleSheet.create({
   buttonOutlinedText: {
     color: "#000",
     fontSize: 14,
+  },
+  rightArrow: {
+    position: "absolute",
+    bottom: 5,
+    right: 5,
   },
 });
 
