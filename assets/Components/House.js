@@ -2,7 +2,8 @@ import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Fontisto, Ionicons } from "@expo/vector-icons";
 import { primary_color } from "../Config/config";
-const HouseCard = ({ house }) => {
+
+const HouseCard = ({ house, onPress }) => {
   const isEven = house.id % 2 === 0;
 
   const handleCallSeller = () => {
@@ -61,7 +62,7 @@ const HouseCard = ({ house }) => {
       )}
       <TouchableOpacity
         style={styles.rightArrow}
-        onPress={() => console.log("Navigate to house details")}
+        onPress={() => onPress(house)}
       >
         <Text style={{ color: primary_color, fontSize: 24 }}>➔</Text>
       </TouchableOpacity>

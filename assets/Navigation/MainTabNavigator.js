@@ -27,14 +27,15 @@ export default function MainTabNavigator() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === "Jobs") {
+            if (route.name === "job") {
               iconName = focused ? "work" : "work-outline";
-            } else if (route.name === "Houses") {
+            } else if (route.name === "house") {
               iconName = focused ? "other-houses" : "other-houses";
             }
 
             return <MaterialIcons name={iconName} size={size} color={color} />;
           },
+          headerShown: false,
         })}
         tabBarOptions={{
           activeTintColor: primary_color,
@@ -42,8 +43,8 @@ export default function MainTabNavigator() {
           elevation: 5,
         }}
       >
-        <Tab.Screen name="Jobs" component={Jobs} />
-        <Tab.Screen name="Houses" component={Houses} />
+        <Tab.Screen name="job" component={Jobs} />
+        <Tab.Screen name="house" component={Houses} />
       </Tab.Navigator>
 
       {/* Modal for Add Button */}
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     width: "80%",
     backgroundColor: "white",
     borderRadius: 10,
-    padding: 50,
+    padding: 0,
   },
   closeButton: {
     textAlign: "right",
