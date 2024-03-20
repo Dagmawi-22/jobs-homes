@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, FlatList } from "react-native";
 import HouseCard from "../Components/House";
-import SearchBar from "../Components/Searchbar";
+import FilterBar from "../Components/Filterbar";
 const dummyHouses = [
   {
     id: "1",
@@ -40,12 +40,34 @@ const dummyHouses = [
   // Add more dummy house objects here
 ];
 
+const searchCriteria = [
+  {
+    criteria: "Category",
+    subCriteria: ["Electronics", "Clothing", "Books"],
+  },
+  {
+    criteria: "Price Range",
+    subCriteria: ["$0 - $50", "$50 - $100", "$100 - $200", "Above $200"],
+  },
+  // Add more criteria objects as needed
+];
+
 const HousesList = () => {
   const renderHouseItem = ({ item }) => <HouseCard house={item} />;
 
+  const [checkedOptions, setCheckedOptions] = useState([]);
+
+  const handleFilterChange = (checkedOptions) => {
+    setCheckedOptions(checkedOptions);
+    console.log("Checked Options:", checkedOptions);
+  };
+
   return (
     <View style={{ flex: 1 }}>
-      <SearchBar placeholder="I'm looking for?" />
+      <FilterBar
+        searchCriteria={searchCriteria}
+        onFilterChange={handleFilterChange}
+      />
       <FlatList
         data={dummyHouses}
         renderItem={renderHouseItem}

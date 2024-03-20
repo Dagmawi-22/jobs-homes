@@ -6,22 +6,22 @@ import { primary_color } from "../Config/config";
 const JobCard = ({ job }) => {
   return (
     <View style={[styles.container, { marginHorizontal: 30 }]}>
-      <View style={styles.header}>
-        <Image source={{ uri: job.companyLogo }} style={styles.logo} />
-        <Text style={styles.companyName}>{job.company}</Text>
+      <View style={styles.coverImageContainer}>
+        <Image source={{ uri: job.coverImage }} style={styles.coverImage} />
+        <View style={styles.logoContainer}>
+          <Image source={{ uri: job.companyLogo }} style={styles.logo} />
+          <Text style={styles.companyName}>{job.company}</Text>
+        </View>
       </View>
-      <Image source={{ uri: job.coverImage }} style={styles.coverImage} />
       <View style={styles.section}>
         <Text style={styles.title}>
           <Feather name="briefcase" style={styles.icon} /> {job.title}
         </Text>
-        <View style={styles.divider} />
       </View>
       <View style={styles.section}>
         <Text style={styles.location}>
           <Feather name="map-pin" style={styles.icon} /> {job.location}
         </Text>
-        <View style={styles.divider} />
       </View>
       <View style={styles.section}>
         <Text style={styles.description}>
@@ -50,11 +50,26 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  header: {
+  coverImageContainer: {
+    position: "relative",
+  },
+  coverImage: {
+    width: "100%",
+    height: 130,
+    marginBottom: 7,
+  },
+  logoContainer: {
+    position: "absolute",
+    top: "50%",
+    left: 50,
+    right: 50,
+    paddingVertical: 10,
+    transform: [{ translateY: -25 }],
     flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
-    padding: 15,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    borderRadius: 10,
   },
   logo: {
     width: 50,
@@ -65,11 +80,6 @@ const styles = StyleSheet.create({
   companyName: {
     fontSize: 18,
     fontWeight: "bold",
-  },
-  coverImage: {
-    width: "100%",
-    height: 130,
-    marginBottom: 7,
   },
   section: {
     paddingHorizontal: 15,
@@ -112,7 +122,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   icon: {
-    marginRight: 5,
+    paddingRight: 10,
     fontSize: 18,
     color: "black",
   },
