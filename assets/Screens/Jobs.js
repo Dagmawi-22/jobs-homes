@@ -3,6 +3,7 @@ import { View, FlatList } from "react-native";
 import JobCard from "../Components/Job";
 import FilterBar from "../Components/Filterbar";
 import Header from "../Components/Header";
+import Heading from "../Components/Heading";
 const searchCriteria = [
   {
     criteria: "Category",
@@ -59,6 +60,7 @@ const Jobs = () => {
           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9C5fdmPrSg2vqk78RwqfY6_ZKBJYHnD82lGQxN86f6A&s"
         }
       />
+      <Heading text={"Browse Jobs"} />
       <FilterBar
         searchCriteria={searchCriteria}
         onFilterChange={handleFilterChange}
