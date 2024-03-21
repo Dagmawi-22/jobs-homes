@@ -1,16 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
 import Jobs from "../Screens/Jobs";
 import Houses from "../Screens/Houses";
 import { primary_color } from "../Config/config";
 import { View, TouchableOpacity, Modal, Text, StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import SelectionComponent from "../Components/JobOrHouse";
+import Auth from "../Screens/Auth";
 
 const Tab = createBottomTabNavigator();
 
 export default function MainTabNavigator() {
   const [showModal, setShowModal] = useState(false);
+  const [user, setUser] = useState(null);
+
+  const getUserObject = async () => {
+    try {
+      const userData = await AsyncStorage.getItem("user");
+      if (userData !== null) {
+        setUser(JSON.parse(userData));
+      }
+    } catch (error) {
+      console.error("Error getting user object:", error);
+    }
+  };
 
   const handleAddPress = () => {
     setShowModal(true);
@@ -20,8 +34,8 @@ export default function MainTabNavigator() {
     setShowModal(false);
   };
 
-  return (
-    <View style={{ flex: 1 }}>
+  const renderTabNavigator = () => {
+    return (
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
@@ -46,27 +60,43 @@ export default function MainTabNavigator() {
         <Tab.Screen name="job" component={Jobs} />
         <Tab.Screen name="house" component={Houses} />
       </Tab.Navigator>
+    );
+  };
 
-      {/* Modal for Add Button */}
-      <Modal visible={showModal} animationType="slide" transparent>
-        <TouchableOpacity
-          style={styles.modalContainer}
-          activeOpacity={1}
-          onPress={handleCloseModal}
-        >
-          <View style={styles.modalContent}>
-            <TouchableOpacity onPress={handleCloseModal}></TouchableOpacity>
-            <SelectionComponent />
-            {/* Add your Add Form here */}
-            {/* For example: <AddForm /> */}
-          </View>
-        </TouchableOpacity>
-      </Modal>
+  useEffect(() => {
+    getUserObject();
+  }, [user]);
 
-      {/* Add Button */}
-      <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
-        <MaterialIcons name="add" size={30} color="white" />
-      </TouchableOpacity>
+  return (
+    <View style={{ flex: 1 }}>
+      {user ? (
+        <>
+          {renderTabNavigator()}
+
+          {/* Modal for Add Button */}
+          <Modal visible={showModal} animationType="slide" transparent>
+            <TouchableOpacity
+              style={styles.modalContainer}
+              activeOpacity={1}
+              onPress={handleCloseModal}
+            >
+              <View style={styles.modalContent}>
+                <TouchableOpacity onPress={handleCloseModal}></TouchableOpacity>
+                <SelectionComponent />
+                {/* Add your Add Form here */}
+                {/* For example: <AddForm /> */}
+              </View>
+            </TouchableOpacity>
+          </Modal>
+
+          {/* Add Button */}
+          <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
+            <MaterialIcons name="add" size={30} color="white" />
+          </TouchableOpacity>
+        </>
+      ) : (
+        <Auth />
+      )}
     </View>
   );
 }

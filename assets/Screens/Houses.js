@@ -10,6 +10,7 @@ import {
 import HouseCard from "../Components/House";
 import FilterBar from "../Components/Filterbar";
 import Header from "../Components/Header";
+import Heading from "../Components/Heading";
 
 const HousesList = () => {
   const dummyHouses = [
@@ -64,6 +65,7 @@ const HousesList = () => {
 
   const [selectedHouse, setSelectedHouse] = useState(null); // State to track the selected house
   const [checkedOptions, setCheckedOptions] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const renderHouseItem = ({ item }) => (
     <HouseCard house={item} onPress={setSelectedHouse} />
@@ -77,11 +79,12 @@ const HousesList = () => {
   return (
     <View style={{ flex: 1 }}>
       <Header
-        title={"Hey"}
+        title={"Hi Joe"}
         avatarUrl={
           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9C5fdmPrSg2vqk78RwqfY6_ZKBJYHnD82lGQxN86f6A&s"
         }
       />
+      <Heading text={"Browse Houses"} />
       <FilterBar
         searchCriteria={searchCriteria}
         onFilterChange={handleFilterChange}
@@ -92,6 +95,9 @@ const HousesList = () => {
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingVertical: 10 }}
       />
+
+      {/* Black overlay when modal is open */}
+      {modalVisible && <View style={styles.overlay} />}
 
       {/* Modal for house details */}
       <Modal
@@ -118,7 +124,7 @@ const HousesList = () => {
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: "flex-end", // Align modal content to the bottom
+    justifyContent: "flex-end",
   },
   bottomSheet: {
     backgroundColor: "#fff",
@@ -133,6 +139,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent black overlay
   },
 });
 
