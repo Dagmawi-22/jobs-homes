@@ -10,6 +10,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { primary_color } from "../Config/config";
+import { useSelector, useDispatch } from "react-redux";
 
 const API_URL = "https://api.example.com";
 
@@ -29,6 +30,9 @@ const ToastModal = ({ visible, message, onClose }) => {
 };
 
 const LoginScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+  //   const user = useSelector((state) => state.user.user);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -78,10 +82,8 @@ const LoginScreen = ({ navigation }) => {
     //       setToastVisible(false);
     //     }, 1500);
     //   });
-    let obj = {
-      name: "Joe",
-    };
-    setUser(obj);
+    const userData = { name: "John", email: "john@example.com" };
+    dispatch({ type: "SET_USER", payload: userData });
   };
 
   return (
@@ -279,7 +281,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: "100%",
     backgroundColor: primary_color,
-    minHeight: 300,
+    minHeight: 150,
     justifyContent: "center",
     borderBottomLeftRadius: 90,
     position: "absolute",
@@ -291,7 +293,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: "100%",
     backgroundColor: primary_color,
-    minHeight: 300,
+    minHeight: 150,
     justifyContent: "center",
     borderBottomRightRadius: 90,
     position: "absolute",
