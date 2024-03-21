@@ -1,6 +1,8 @@
 import React from "react";
 import { useFonts } from "expo-font";
 import Navigation from "./assets/Navigation/NavigationContainer";
+import { Provider } from "react-redux";
+import store from "./assets/data/store";
 
 const App = () => {
   const [loaded] = useFonts({
@@ -14,7 +16,11 @@ const App = () => {
     return null; // For simplicity, returning null, replace with your loading indicator component
   }
 
-  return <Navigation />;
+  return (
+    <Provider store={store}>
+      <Navigation />
+    </Provider>
+  );
 };
 
 export default App;
