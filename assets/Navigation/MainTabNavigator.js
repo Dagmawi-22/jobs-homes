@@ -5,26 +5,32 @@ import Jobs from "../Screens/Jobs";
 import Houses from "../Screens/Houses";
 import { primary_color } from "../Config/config";
 import { View, TouchableOpacity, Modal, Text, StyleSheet } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import SelectionComponent from "../Components/JobOrHouse";
 import Auth from "../Screens/Auth";
+import { useSelector } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 
 export default function MainTabNavigator() {
   const [showModal, setShowModal] = useState(false);
-  const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.user.user);
 
-  const getUserObject = async () => {
-    try {
-      const userData = await AsyncStorage.getItem("user");
-      if (userData !== null) {
-        setUser(JSON.parse(userData));
-      }
-    } catch (error) {
-      console.error("Error getting user object:", error);
-    }
-  };
+  // const getUserObject = async () => {
+  //   // try {
+  //   //   const userData = await AsyncStorage.getItem("user");
+  //   //   if (userData !== null) {
+  //   //     setUser(JSON.parse(userData));
+  //   //   }
+  //   // } catch (error) {
+  //   //   console.error("Error getting user object:", error);
+  //   // }
+  //   try {
+  //     await AsyncStorage.removeItem("user");
+  //     console.log("User object removed successfully.");
+  //   } catch (error) {
+  //     console.error("Error removing user object:", error);
+  //   }
+  // };
 
   const handleAddPress = () => {
     setShowModal(true);
@@ -62,10 +68,6 @@ export default function MainTabNavigator() {
       </Tab.Navigator>
     );
   };
-
-  useEffect(() => {
-    getUserObject();
-  }, [user]);
 
   return (
     <View style={{ flex: 1 }}>

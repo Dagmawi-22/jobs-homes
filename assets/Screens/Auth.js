@@ -144,39 +144,43 @@ const SignUpScreen = ({ navigation }) => {
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
+  const dispatch = useDispatch();
+
   const handleSignUp = () => {
     // Implement your signup logic here
     console.log("Signing up with:", email, password, confirmPassword);
+    const userData = { name: "John", email: "john@example.com" };
+    dispatch({ type: "SET_USER", payload: userData });
     // Perform API request to signup
-    fetch(API_URL + "/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle response from server
-        console.log("Signup Response:", data);
-        // Navigate to the next screen if signup is successful
-        if (data.success) {
-          navigation.navigate("NextScreen");
-        } else {
-          setToastMessage("Sign up failed. Please try again.");
-          setToastVisible(true);
-          setTimeout(() => {
-            setToastVisible(false);
-          }, 1500);
-        }
-      })
-      .catch((error) => {
-        setToastMessage("Signup failed. Please try again.");
-        setToastVisible(true);
-        setTimeout(() => {
-          setToastVisible(false);
-        }, 1500);
-      });
+    // fetch(API_URL + "/signup", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ email, password }),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     // Handle response from server
+    //     console.log("Signup Response:", data);
+    //     // Navigate to the next screen if signup is successful
+    //     if (data.success) {
+    //       navigation.navigate("NextScreen");
+    //     } else {
+    //       setToastMessage("Sign up failed. Please try again.");
+    //       setToastVisible(true);
+    //       setTimeout(() => {
+    //         setToastVisible(false);
+    //       }, 1500);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     setToastMessage("Signup failed. Please try again.");
+    //     setToastVisible(true);
+    //     setTimeout(() => {
+    //       setToastVisible(false);
+    //     }, 1500);
+    //   });
   };
 
   return (
