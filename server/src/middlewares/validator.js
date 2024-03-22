@@ -6,12 +6,6 @@ import {
 } from "../helpers/validation.js";
 
 export const register_user_validator = [
-  body("name")
-    .exists()
-    .withMessage("Name is required")
-    .notEmpty()
-    .withMessage("Name cannot be empty")
-    .trim(),
   body("email")
     .exists()
     .withMessage("Email is required")
@@ -26,7 +20,5 @@ export const register_user_validator = [
     .withMessage("Password cannot be empty")
     .isLength({ min: 5 })
     .withMessage("Password must be atleast 6 characters"),
-  body().custom((body) =>
-    checkAllowedFields(body, ["name", "email", "password"])
-  ),
+  body().custom((body) => checkAllowedFields(body, ["email", "password"])),
 ];

@@ -53,14 +53,9 @@ const HousesList = () => {
 
   const searchCriteria = [
     {
-      criteria: "Category",
-      subCriteria: ["Electronics", "Clothing", "Books"],
+      criteria: "Price",
+      subCriteria: ["100-1000", "1001-10000", "10000+"],
     },
-    {
-      criteria: "Price Range",
-      subCriteria: ["$0 - $50", "$50 - $100", "$100 - $200", "Above $200"],
-    },
-    // Add more criteria objects as needed
   ];
 
   const [selectedHouse, setSelectedHouse] = useState(null); // State to track the selected house

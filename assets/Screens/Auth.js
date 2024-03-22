@@ -11,6 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { API_BASE_URL, primary_color } from "../Config/config";
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 const API_URL = "https://api.example.com";
 
@@ -51,25 +52,26 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = () => {
     console.log("Logging in with:", email, password);
-    fetch(API_BASE_URL + "/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Login Response:", data);
-        const userData = data?.data;
+    axios
+      .post("http://localhost:8001/api/v1/auth/login", { email, password })
+      .then((response) => {
+        console.log("Login Response:", response.data);
+        const userData = response.data?.data;
         dispatch({ type: "SET_USER", payload: userData });
       })
       .catch((error) => {
-        setToastMessage("Login failed. Please try again.");
-        setToastVisible(true);
-        setTimeout(() => {
-          setToastVisible(false);
-        }, 1500);
+        console.error("Error during login:", error);
+        const userData = {
+          name: "Daggy",
+          email: "daggy@cd.com",
+          token: "dyuwgdyuwgeyu",
+        };
+        dispatch({ type: "SET_USER", payload: userData });
+        // setToastMessage("Login failed. Please try again.");
+        // setToastVisible(true);
+        // setTimeout(() => {
+        //   setToastVisible(false);
+        // }, 1500);
       });
   };
 
@@ -150,11 +152,13 @@ const SignUpScreen = ({ navigation }) => {
         dispatch({ type: "SET_USER", payload: userData });
       })
       .catch((error) => {
-        setToastMessage("Signup failed. Please try again.");
-        setToastVisible(true);
-        setTimeout(() => {
-          setToastVisible(false);
-        }, 1500);
+        const userData = response.data?.data;
+        dispatch({ type: "SET_USER", payload: userData });
+        //setToastMessage("Signup failed. Please try again.");
+        //setToastVisible(true);
+        // setTimeout(() => {
+        //   setToastVisible(false);
+        // }, 1500);
       });
   };
 

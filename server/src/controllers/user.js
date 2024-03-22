@@ -10,22 +10,17 @@ const generateToken = (id) => {
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
 
     //Hash user password..
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
 
     const user = await User.create({
-      name,
       email,
       password: hashPassword,
     });
 
-    const properties = {
-      email,
-      name,
-    };
     // Generate token
     const token = generateToken(user._id);
 

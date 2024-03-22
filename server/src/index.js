@@ -8,10 +8,13 @@ import connectDB from "./database/database.js";
 import userRoutes from "./routes/user.js";
 import jobRoutes from "./routes/job.js";
 import houseRoutes from "./routes/house.js";
+import cors from "cors";
 
 const app = express();
 
 dotenv.config();
+
+app.use(cors());
 
 //middlewares
 app.use(express.json());
