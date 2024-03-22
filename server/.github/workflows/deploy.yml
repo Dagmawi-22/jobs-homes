@@ -1,0 +1,207 @@
+
+name: Deploy
+
+on:
+  push:
+    branches: [ "main","develop","qa" ]
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
+env:
+  S3_BUCKET_NAME:  dev-backend-w2w-artifact-bucket-eu-west-2
+  CODECOMMIT_REPO_NAME: dev_backend_w2w_repo_eu_west_2
+  KEY_PAIR_NAME: w2w_key_pair_eu_west_2_dev     
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    # install dependencies, cache them and run tests
+    - name: Install Dependencies and Run Tests
+      run: |
+        npm install
+        npm ci
+        npm test
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js 
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+        cache: 'npm'
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.DEV_AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.DEV_AWS_SECRET_KEY }}
+        aws-region: 'eu-west-2'
+    - name: Install Dependencies and Run Tests
+      run: |
+        npm install
+        npm ci
+    - name: Run the Server to see if it works
+      run: |
+        node src/index.js > /dev/null 2> /dev/null < /dev/null & 
+  create-resources:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.DEV_AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.DEV_AWS_SECRET_KEY }}
+          aws-region: 'eu-west-2'
+      - name: Check if S3 Bucket exists
+        id: check_bucket
+        run: |
+          set -eo pipefail
+          if aws s3api head-bucket --bucket $S3_BUCKET_NAME 2>/dev/null; then
+            echo "::set-output name=bucket_exists::true"
+          else
+            echo "::set-output name=bucket_exists::false"
+          fi
+
+      - name: Create S3 Bucket if it does not exist
+        if: steps.check_bucket.outputs.bucket_exists == 'false'
+        run: |
+          aws s3api create-bucket --bucket $S3_BUCKET_NAME --region eu-west-2 --create-bucket-configuration LocationConstraint=eu-west-2
+          echo "S3_BUCKET_NAME=$S3_BUCKET_NAME" >> $GITHUB_ENV
+
+      - name: Check if CodeCommit repository exists
+        id: check_codecommit
+        run: |
+          if aws codecommit list-repositories --region eu-west-2 | grep -q "\"repositoryName\": \"$CODECOMMIT_REPO_NAME\""; then
+            echo "::set-output name=repo_exists::true"
+          else
+            echo "::set-output name=repo_exists::false"
+          fi
+
+      - name: Create CodeCommit Repository if it does not exist
+        if: steps.check_codecommit.outputs.repo_exists == 'false'
+        run: |
+          aws codecommit create-repository --repository-name $CODECOMMIT_REPO_NAME
+          echo "CODECOMMIT_REPO_NAME=$CODECOMMIT_REPO_NAME" >> $GITHUB_ENV
+
+      - name: Check if Key Pair exists
+        id: check_keypair
+        run: |
+          if aws ec2 describe-key-pairs --key-name $KEY_PAIR_NAME --region eu-west-2 | grep -q "\"KeyName\": \"$KEY_PAIR_NAME\""; then
+            echo "::set-output name=keypair_exists::true"
+          else
+            echo "::set-output name=keypair_exists::false"
+          fi
+
+      - name: Generate Key Pair if it does not exist
+        if: steps.check_keypair.outputs.keypair_exists == 'false'
+        run: |
+          aws ec2 create-key-pair --key-name $KEY_PAIR_NAME --query 'KeyMaterial' --output text > $KEY_PAIR_NAME.pem
+          chmod 400 $KEY_PAIR_NAME.pem
+          echo "KEY_PAIR_NAME=$KEY_PAIR_NAME" >> $GITHUB_ENV
+     
+
+  sync:
+    runs-on: ubuntu-latest
+    needs: create-resources
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.DEV_AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.DEV_AWS_SECRET_KEY }}
+          aws-region: 'eu-west-2'
+      - name: Set safe.directory
+        run: git config --global --add safe.directory /github/workspace
+
+      - name: Sync up to CodeCommit
+        run :  git push --force https://${{ secrets.DEV_CODECOMMIT_USERNAME }}:${{ secrets.DEV_CODECOMMIT_PASSWORD }}@git-codecommit.eu-west-2.amazonaws.com/v1/repos/${{ env.CODECOMMIT_REPO_NAME }} 'refs/remotes/origin/*:refs/heads/*'
+ 
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: sync
+    steps:
+    - uses: actions/checkout@v3
+    # check the branch name that triggered the workflow and deploy to the corresponding environment
+    - name: Check if environment was provide if not get from the branch that triggered the workflow
+      run: |
+        if [ -z ${{ github.event.inputs.environment }} ]; then
+          if [ ${{ github.event_name }} == 'push' ]; then
+            if [ ${{ github.ref }} == 'refs/heads/main' ]; then
+              echo "environment=prod" >> $GITHUB_ENV
+              echo "branch=main" >> $GITHUB_ENV
+            elif [ ${{ github.ref }} == 'refs/heads/develop' ]; then
+              echo "environment=dev" >> $GITHUB_ENV
+            elif [ ${{ github.ref }} == 'refs/heads/qa' ]; then
+              echo "environment=qa" >> $GITHUB_ENV
+              echo "branch=qa" >> $GITHUB_ENV
+            else
+              echo "Invalid branch"
+              exit 1
+            fi
+          else
+            echo "Invalid event"
+            exit 1
+          fi
+        else
+          echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
+          echo "branch=${{ github.event.inputs.branch }}" >> $GITHUB_ENV
+        fi
+      id: get_environment
+    - name: Deploy to ${{env.environment}} environment
+      run: |
+        echo "Deploying to ${{env.environment}} environment"
+        echo "Branch: ${{env.branch}}"
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.DEV_AWS_ACCESS_KEY}}
+        aws-secret-access-key: ${{ secrets.DEV_AWS_SECRET_KEY }}
+        aws-region: 'eu-west-2'
+
+    - name: Deploy CloudFormation Stack
+      uses: aws-actions/aws-cloudformation-github-deploy@v1
+      with:
+        name: w2w-backend
+        template: aws/cloudformation.yaml
+        capabilities: CAPABILITY_NAMED_IAM
+        no-fail-on-empty-changeset: "1"
+        parameter-overrides: |
+          Environment=${{ env.environment }}
+          Branch=${{ env.branch }}
+          KeyName=${{ env.KEY_PAIR_NAME }}
+          ArtifactS3Bucket=${{ env.S3_BUCKET_NAME }}
+          ReactRepository=${{ env.CODECOMMIT_REPO_NAME }}
+
+      
+
