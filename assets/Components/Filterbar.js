@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
     zIndex: 1000,
     width: "90%",
     maxHeight: 400,
+    elevation: 25,
   },
   filterTitle: {
     fontSize: 18,

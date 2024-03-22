@@ -9,19 +9,24 @@ import {
 } from "react-native";
 import { primary_color } from "../Config/config";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
 
 const Header = ({ title, avatarUrl }) => {
+  const user = useSelector((state) => state.user.user);
+
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
     // Implement logout functionality here
     console.log("Logout pressed");
     setShowLogoutModal(false); // Close the logout modal after logout
+    dispatch({ type: "REMOVE_USER" });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title}>Hi {user?.name}</Text>
       <View style={styles.rightContent}>
         <TouchableOpacity style={styles.avatarContainer}>
           <Image source={{ uri: avatarUrl }} style={styles.avatar} />

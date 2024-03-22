@@ -6,14 +6,13 @@ import Header from "../Components/Header";
 import Heading from "../Components/Heading";
 const searchCriteria = [
   {
-    criteria: "Category",
-    subCriteria: ["Electronics", "Clothing", "Books"],
+    criteria: "title",
+    subCriteria: ["CTO", "Sales", "Software Enginner"],
   },
   {
-    criteria: "Price Range",
-    subCriteria: ["$0 - $50", "$50 - $100", "$100 - $200", "Above $200"],
+    criteria: "Date Posted",
+    subCriteria: ["11/2023 - 12/2023", "1/2024 - 7/2024"],
   },
-  // Add more criteria objects as needed
 ];
 
 const dummyJobs = [
