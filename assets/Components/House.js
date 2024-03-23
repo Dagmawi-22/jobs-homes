@@ -7,12 +7,10 @@ const HouseCard = ({ house, onPress }) => {
   const isEven = house.id % 2 === 0;
 
   const handleCallSeller = () => {
-    // Add logic to handle calling the seller
     console.log("Calling seller...");
   };
 
   const handleEmailSeller = () => {
-    // Add logic to handle emailing the seller
     console.log("Emailing seller...");
   };
 

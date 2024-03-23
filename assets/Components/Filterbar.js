@@ -47,12 +47,14 @@ const FilterBar = ({ searchCriteria, onFilterChange }) => {
                 <TouchableOpacity
                   key={subIndex}
                   style={styles.filterItem}
-                  onPress={() => handleFilterCriteriaChange(subItem)}
+                  onPress={() =>
+                    handleFilterCriteriaChange(item + "|" + subItem)
+                  }
                 >
                   <Text>{subItem}</Text>
                   <Feather
                     name={
-                      filterCriteria.includes(subItem)
+                      filterCriteria.includes(item + "|" + subItem)
                         ? "check-square"
                         : "square"
                     }

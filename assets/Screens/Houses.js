@@ -48,7 +48,6 @@ const HousesList = () => {
         "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       image: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
     },
-    // Add more dummy house objects here
   ];
 
   const searchCriteria = [
@@ -58,7 +57,7 @@ const HousesList = () => {
     },
   ];
 
-  const [selectedHouse, setSelectedHouse] = useState(null); // State to track the selected house
+  const [selectedHouse, setSelectedHouse] = useState(null);
   const [checkedOptions, setCheckedOptions] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 

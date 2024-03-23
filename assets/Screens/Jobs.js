@@ -21,7 +21,8 @@ const dummyJobs = [
     title: "CTO",
     company: "Zemen Bank",
     location: "Addis Ababa, ET",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    description:
+      "Responsible for leading the bank's IT team, based in Addis Ababa.",
     companyLogo:
       "https://pbs.twimg.com/profile_images/1301108895713296385/Z8zbH8NH_400x400.jpg",
     coverImage:
@@ -29,10 +30,10 @@ const dummyJobs = [
   },
   {
     id: 2,
-    title: "Product Manager",
+    title: "Software Architect",
     company: "XYZ Inc.",
     location: "New York, NY",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    description: "You will play a pivotal role in designing our new projects.",
     companyLogo:
       "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
     coverImage:
