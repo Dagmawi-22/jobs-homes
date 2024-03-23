@@ -7,7 +7,7 @@ import {
   Image,
   Modal,
 } from "react-native";
-import { primary_color } from "../Config/config";
+import { primary_color } from "../config/config";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 

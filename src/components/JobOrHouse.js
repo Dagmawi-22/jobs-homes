@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { primary_color } from "../Config/config";
+import { primary_color } from "../config/config";
 
 const SelectionButton = ({ option, selected, onSelect }) => {
   return (

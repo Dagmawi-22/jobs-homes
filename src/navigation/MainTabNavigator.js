@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
-import Jobs from "../Screens/Jobs";
-import Houses from "../Screens/Houses";
-import { primary_color } from "../Config/config";
+import Jobs from "../../src/screens/jobs";
+import Houses from "../../src/screens/houses";
+import { primary_color } from "../config/config";
 import { View, TouchableOpacity, Modal, Text, StyleSheet } from "react-native";
-import SelectionComponent from "../Components/JobOrHouse";
-import Auth from "../Screens/Auth";
+import SelectionComponent from "../components/JobOrHouse";
+import Auth from "../../src/screens/auth";
 import { useSelector } from "react-redux";
 
 const Tab = createBottomTabNavigator();

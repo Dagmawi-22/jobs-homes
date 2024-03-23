@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Fontisto, Ionicons } from "@expo/vector-icons";
-import { primary_color } from "../Config/config";
+import { primary_color } from "../config/config";
 
 const HouseCard = ({ house, onPress }) => {
   const isEven = house.id % 2 === 0;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   FlatList,
@@ -7,48 +7,17 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import HouseCard from "../Components/House";
-import FilterBar from "../Components/Filterbar";
-import Header from "../Components/Header";
-import Heading from "../Components/Heading";
+import HouseCard from "../components/House";
+import FilterBar from "../components/Filterbar";
+import Header from "../components/Header";
+import Heading from "../components/Heading";
+import { API_BASE_URL } from "../config/config";
 
 const HousesList = () => {
-  const dummyHouses = [
-    {
-      id: "1",
-      title: "Beautiful House with Garden",
-      price: "$500,000",
-      location: "New York",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
-    },
-    {
-      id: "2",
-      title: "Cozy Cottage near the Lake",
-      price: "$300,000",
-      location: "Los Angeles",
-      description:
-        "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      image: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
-    },
-    {
-      id: "3",
-      title: "Beautiful House with Garden",
-      price: "$500,000",
-      location: "New York",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
-    },
-    {
-      id: "4",
-      title: "Cozy Cottage near the Lake",
-      price: "$300,000",
-      location: "Los Angeles",
-      description:
-        "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      image: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
-    },
-  ];
+  const [houses, setHouses] = useState([]);
+  const [selectedHouse, setSelectedHouse] = useState(null);
+  const [checkedOptions, setCheckedOptions] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const searchCriteria = [
     {
@@ -57,9 +26,16 @@ const HousesList = () => {
     },
   ];
 
-  const [selectedHouse, setSelectedHouse] = useState(null);
-  const [checkedOptions, setCheckedOptions] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/houses`)
+      .then((response) => response.json())
+      .then((data) => {
+        setHouses(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   const renderHouseItem = ({ item }) => (
     <HouseCard house={item} onPress={setSelectedHouse} />
@@ -84,7 +60,7 @@ const HousesList = () => {
         onFilterChange={handleFilterChange}
       />
       <FlatList
-        data={dummyHouses}
+        data={houses}
         renderItem={renderHouseItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingVertical: 10 }}
@@ -136,7 +112,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent black overlay
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });
 

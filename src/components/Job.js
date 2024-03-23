@@ -1,15 +1,20 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { primary_color } from "../Config/config";
+import { primary_color } from "../config/config";
+
+const companyLogo =
+  "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg";
+const coverImage =
+  "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg";
 
 const JobCard = ({ job }) => {
   return (
     <View style={[styles.container, { marginHorizontal: 30 }]}>
       <View style={styles.coverImageContainer}>
-        <Image source={{ uri: job.coverImage }} style={styles.coverImage} />
+        <Image source={{ uri: coverImage }} style={styles.coverImage} />
         <View style={styles.logoContainer}>
-          <Image source={{ uri: job.companyLogo }} style={styles.logo} />
+          <Image source={{ uri: companyLogo }} style={styles.logo} />
           <Text style={styles.companyName}>{job.company}</Text>
         </View>
       </View>
