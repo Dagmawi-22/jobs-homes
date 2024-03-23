@@ -1,8 +1,8 @@
 import React from "react";
 import { useFonts } from "expo-font";
-import Navigation from "./assets/Navigation/NavigationContainer";
+import Navigation from "./src/navigation/NavigationContainer";
 import { Provider } from "react-redux";
-import store from "./assets/data/store";
+import store from "./src/data/store";
 
 const App = () => {
   const [loaded] = useFonts({

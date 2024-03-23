@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
-import Jobs from "../Screens/Jobs";
-import Houses from "../Screens/Houses";
-import { primary_color } from "../Config/config";
+import Jobs from "../../src/screens/jobs";
+import Houses from "../../src/screens/houses";
+import { primary_color } from "../config/config";
 import { View, TouchableOpacity, Modal, Text, StyleSheet } from "react-native";
-import SelectionComponent from "../Components/JobOrHouse";
-import Auth from "../Screens/Auth";
+import SelectionComponent from "../components/JobOrHouse";
+import Auth from "../../src/screens/auth";
 import { useSelector } from "react-redux";
 
 const Tab = createBottomTabNavigator();
@@ -14,23 +14,6 @@ const Tab = createBottomTabNavigator();
 export default function MainTabNavigator() {
   const [showModal, setShowModal] = useState(false);
   const user = useSelector((state) => state.user.user);
-
-  // const getUserObject = async () => {
-  //   // try {
-  //   //   const userData = await AsyncStorage.getItem("user");
-  //   //   if (userData !== null) {
-  //   //     setUser(JSON.parse(userData));
-  //   //   }
-  //   // } catch (error) {
-  //   //   console.error("Error getting user object:", error);
-  //   // }
-  //   try {
-  //     await AsyncStorage.removeItem("user");
-  //     console.log("User object removed successfully.");
-  //   } catch (error) {
-  //     console.error("Error removing user object:", error);
-  //   }
-  // };
 
   const handleAddPress = () => {
     setShowModal(true);
@@ -85,8 +68,6 @@ export default function MainTabNavigator() {
               <View style={styles.modalContent}>
                 <TouchableOpacity onPress={handleCloseModal}></TouchableOpacity>
                 <SelectionComponent />
-                {/* Add your Add Form here */}
-                {/* For example: <AddForm /> */}
               </View>
             </TouchableOpacity>
           </Modal>

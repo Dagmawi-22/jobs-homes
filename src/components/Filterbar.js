@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { primary_color } from "../Config/config";
+import { primary_color } from "../config/config";
 
 const FilterBar = ({ searchCriteria, onFilterChange }) => {
   const [filterOpen, setFilterOpen] = useState(false); // State for filter open/close
@@ -47,12 +47,14 @@ const FilterBar = ({ searchCriteria, onFilterChange }) => {
                 <TouchableOpacity
                   key={subIndex}
                   style={styles.filterItem}
-                  onPress={() => handleFilterCriteriaChange(subItem)}
+                  onPress={() =>
+                    handleFilterCriteriaChange(item + "|" + subItem)
+                  }
                 >
                   <Text>{subItem}</Text>
                   <Feather
                     name={
-                      filterCriteria.includes(subItem)
+                      filterCriteria.includes(item + "|" + subItem)
                         ? "check-square"
                         : "square"
                     }
