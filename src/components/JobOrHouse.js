@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
   Modal,
   TextInput,
   Image,
+  StyleSheet,
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { primary_color } from "../config/config";
+import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
+import { API_BASE_URL, primary_color } from "../config/config";
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
 
 const SelectionButton = ({ option, selected, onSelect }) => {
   return (
@@ -37,126 +39,160 @@ const PostingForm = ({ selectedOption, onSelectBack }) => {
     description: "",
     email: "",
     phone: "",
-    logo: "",
-    coverImage: "",
+    photo: null,
   });
+
+  const [image, setImage] = useState(null);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setFormData({ ...formData, photo: result?.assets[0]?.uri });
+      setImage(result?.assets[0]?.uri);
+    }
+  };
 
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleSubmit = () => {
-    // Handle form submission
-    // You can access form data from 'formData' state
-    console.log("Form submitted:", formData);
-    // Reset form data
-    setFormData({
-      title: "",
-      price: "",
-      location: "",
-      description: "",
-      email: "",
-      phone: "",
-      logo: "",
-      coverImage: "",
-    });
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${selectedOption}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        alert("Something went wrong");
+        return;
+      }
+
+      const data = await response.json();
+      console.log("Form submitted:", data);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
     <Modal visible={!!selectedOption} animationType="slide">
-      <View style={styles.modalContainer}>
+      <>
         <TouchableOpacity style={styles.backButton} onPress={onSelectBack}>
-          <MaterialIcons name="arrow-back" size={24} color="#007bff" />
-          <Text style={styles.backButtonText}>Back</Text>
+          <MaterialIcons name="arrow-back" size={27} color="#000" />
         </TouchableOpacity>
+        <View style={styles.imageContainer}>
+          <Image
+            source={
+              selectedOption === "job"
+                ? require("../../assets/job.png")
+                : require("../../assets/house.jpg")
+            }
+            style={styles.bg}
+          />
+        </View>
+        <View style={styles.modalContainer}>
+          {selectedOption === "house" ? (
+            <>
+              {image ? (
+                <Image source={{ uri: image }} style={styles.image} />
+              ) : (
+                <View style={styles.centeredTextContainer}>
+                  <Text style={styles.centeredText}>Photo</Text>
+                </View>
+              )}
 
-        <MaterialIcons
-          name={selectedOption === "job" ? "work" : "house"}
-          size={144}
-          color={primary_color}
-        />
-        <Text style={styles.modalTitle}>Add a new {selectedOption}</Text>
-        {/* Form fields */}
-        {selectedOption === "House" ? (
-          <>
-            <TextInput
-              style={styles.input}
-              placeholder="Title"
-              value={formData.title}
-              onChangeText={(text) => handleInputChange("title", text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Price"
-              value={formData.price}
-              onChangeText={(text) => handleInputChange("price", text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Location"
-              value={formData.location}
-              onChangeText={(text) => handleInputChange("location", text)}
-            />
-            <TextInput
-              style={[styles.input, styles.descriptionInput]}
-              placeholder="Description"
-              value={formData.description}
-              onChangeText={(text) => handleInputChange("description", text)}
-              multiline
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              value={formData.email}
-              onChangeText={(text) => handleInputChange("email", text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Phone"
-              value={formData.phone}
-              onChangeText={(text) => handleInputChange("phone", text)}
-            />
-          </>
-        ) : (
-          <>
-            <TextInput
-              style={styles.input}
-              placeholder="Title"
-              value={formData.title}
-              onChangeText={(text) => handleInputChange("title", text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Location"
-              value={formData.location}
-              onChangeText={(text) => handleInputChange("location", text)}
-            />
-            <TextInput
-              style={[styles.input, styles.descriptionInput]}
-              placeholder="Description"
-              value={formData.description}
-              onChangeText={(text) => handleInputChange("description", text)}
-              multiline
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Logo URL"
-              value={formData.logo}
-              onChangeText={(text) => handleInputChange("logo", text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Cover Image URL"
-              value={formData.coverImage}
-              onChangeText={(text) => handleInputChange("coverImage", text)}
-            />
-          </>
-        )}
-        {/* Submit button */}
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>Submit</Text>
-        </TouchableOpacity>
-      </View>
+              <FontAwesome
+                name="photo"
+                size={20}
+                color="#000"
+                onPress={pickImage}
+                style={styles.editIcon}
+              />
+
+              <TextInput
+                style={styles.input}
+                placeholder="Title (e.g., Beautiful Villa)"
+                value={formData.title}
+                onChangeText={(text) => handleInputChange("title", text)}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Price (e.g., 100000)"
+                value={formData.price}
+                keyboardType="numeric"
+                onChangeText={(text) => handleInputChange("price", text)}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Location (e.g., New York City)"
+                value={formData.location}
+                onChangeText={(text) => handleInputChange("location", text)}
+              />
+              <TextInput
+                style={[styles.input, styles.descriptionInput]}
+                placeholder="Description (e.g., Spacious 3-bedroom apartment with stunning views)"
+                value={formData.description}
+                onChangeText={(text) => handleInputChange("description", text)}
+                multiline
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Email (e.g., example@example.com)"
+                value={formData.email}
+                onChangeText={(text) => handleInputChange("email", text)}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Phone (e.g., 123-456-7890)"
+                value={formData.phone}
+                keyboardType="numeric"
+                onChangeText={(text) => handleInputChange("phone", text)}
+              />
+            </>
+          ) : (
+            <>
+              <TextInput
+                style={styles.input}
+                placeholder="Title e.g., Software Engineer"
+                value={formData.title}
+                onChangeText={(text) => handleInputChange("title", text)}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Category e.g., Technology"
+                value={formData.logo}
+                onChangeText={(text) => handleInputChange("logo", text)}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Location e.g., New York, NY"
+                value={formData.location}
+                onChangeText={(text) => handleInputChange("location", text)}
+              />
+              <TextInput
+                style={[styles.input, styles.descriptionInput]}
+                placeholder="Description e.g., We are looking for a skilled software engineer..."
+                value={formData.description}
+                onChangeText={(text) => handleInputChange("description", text)}
+                multiline
+              />
+            </>
+          )}
+          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+            <Text style={styles.submitButtonText}>Submit</Text>
+          </TouchableOpacity>
+        </View>
+      </>
     </Modal>
   );
 };
@@ -194,6 +230,8 @@ const SelectionComponent = ({}) => {
     </>
   );
 };
+
+export default SelectionComponent;
 
 const styles = StyleSheet.create({
   container: {
@@ -235,74 +273,112 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
+    marginTop: -20,
   },
   modalTitle: {
-    fontSize: 24,
+    fontSize: 34,
+    color: "#000",
     fontWeight: "bold",
-    marginBottom: 20,
+    textShadowColor: "rgba(0, 0, 0, 0.5)", // Color of the shadow
+    textShadowOffset: { width: 2, height: 2 }, // Offset of the shadow
+    marginBottom: 10,
   },
+
   backButton: {
     position: "absolute",
     top: 10,
     left: 10,
     flexDirection: "row",
     alignItems: "center",
+    zIndex: 9999,
   },
-  backButtonText: {
-    color: "#007bff",
-    fontSize: 16,
-    marginLeft: 5,
+
+  image: {
+    width: "80%",
+    height: 80,
+    borderRadius: 5,
+    marginBottom: 20,
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  bg: {
+    width: "100%",
+    height: 200,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  imageContainer: {
+    width: "100%",
+    marginHorizontal: 20,
+    height: 250,
+    borderRadius: 5,
+    marginVertical: 30,
+    position: "relative",
+    overflow: "hidden",
+    marginBottom: -40,
+  },
+
+  editIcon: {
     backgroundColor: "#fff",
-    paddingHorizontal: 20,
-  },
-  backButton: {
-    position: "absolute",
-    top: 10,
-    left: 10,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  backButtonText: {
-    color: "#007bff",
-    fontSize: 16,
-    marginLeft: 5,
-  },
-  modalTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
+    elevation: 10,
+    alignSelf: "flex-end",
+    marginRight: "10%",
+    marginTop: -80,
+    padding: 2,
+    borderRadius: 10,
+    zIndex: 100,
+    marginBottom: 60,
   },
   input: {
-    width: "100%",
     height: 40,
     borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 5,
+    borderBottomWidth: 1, // Applying a bottom border only
     paddingHorizontal: 10,
+    width: "80%",
     marginBottom: 10,
+    fontSize: 16, // Adjust the font size
+    color: "#333", // Adjust the text color
   },
   descriptionInput: {
     height: 80,
     textAlignVertical: "top", // Vertical alignment for multiline text
   },
   submitButton: {
-    backgroundColor: primary_color,
-    padding: 10,
-    paddingHorizontal: 70,
+    backgroundColor: primary_color, // Background color to match the outer layer
+    paddingVertical: 12, // Adjusted padding for better appearance
+    paddingHorizontal: 20, // Adjusted padding for better appearance
     alignSelf: "flex-end",
-    borderRadius: 5,
+    marginRight: "10%",
+    borderRadius: 25, // Increase border radius for a smoother appearance
     marginTop: 20,
+    borderWidth: 2, // Add border width
+    borderColor: primary_color, // Border color to match the inner layer
+    elevation: 3, // Add elevation for a subtle shadow effect
+    shadowColor: "#000", // Shadow color
+    shadowOpacity: 0.3, // Shadow opacity
+    shadowRadius: 3, // Shadow blur radius
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    marginBottom: 5,
   },
   submitButtonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
   },
+  centeredTextContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    backgroundColor: "gray",
+    borderColor: "#f6f6ff",
+    width: "80%",
+    height: 80,
+    borderRadius: 5,
+  },
+  centeredText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+  },
 });
-
-export default SelectionComponent;

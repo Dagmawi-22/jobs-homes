@@ -17,6 +17,15 @@ const searchCriteria = [
   },
 ];
 
+const dummyJobs = [
+  {
+    id: 1,
+    title: "Check",
+    location: "Addis A",
+    description: "A random description for the",
+  },
+];
+
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
   const [checkedOptions, setCheckedOptions] = useState([]);
@@ -53,7 +62,7 @@ const Jobs = () => {
         onFilterChange={handleFilterChange}
       />
       <FlatList
-        data={jobs}
+        data={dummyJobs}
         renderItem={renderJobItem}
         keyExtractor={(item) => item.id.toString()}
       />
