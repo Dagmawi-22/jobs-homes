@@ -69,17 +69,17 @@ const LoginScreen = ({ navigation }) => {
         })
         .catch((error) => {
           console.error("Error during login:", error);
-          const userData = {
-            name: "Daggy",
-            email: "daggy@cd.com",
-            token: "dyuwgdyuwgeyu",
-          };
-          dispatch({ type: "SET_USER", payload: userData });
-          // setToastMessage("Login failed. Please try again.");
-          // setToastVisible(true);
-          // setTimeout(() => {
-          //   setToastVisible(false);
-          // }, 1500);
+          // const userData = {
+          //   name: "Daggy",
+          //   email: "daggy@cd.com",
+          //   token: "dyuwgdyuwgeyu",
+          // };
+          // dispatch({ type: "SET_USER", payload: userData });
+          setToastMessage("Login failed. Please try again.");
+          setToastVisible(true);
+          setTimeout(() => {
+            setToastVisible(false);
+          }, 1500);
         });
     }
   };
@@ -146,7 +146,7 @@ const SignUpScreen = ({ navigation }) => {
 
   const handleSignUp = () => {
     console.log("Signing up with:", email, password, confirmPassword);
-      if (!email || !password || password !== confirmPassword) {
+    if (!email || !password || password !== confirmPassword) {
       setToastMessage("Sign up failed. Check input fields.");
       setToastVisible(true);
       setTimeout(() => {
@@ -154,36 +154,34 @@ const SignUpScreen = ({ navigation }) => {
       }, 1500);
       return;
     } else {
-          fetch(API_BASE_URL + "/auth/register", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password }),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log("Signup Response:", data);
-              const userData = data?.data;
-              dispatch({ type: "SET_USER", payload: userData });
-            })
-            .catch((error) => {
-              // const userData = response.data?.data;
-              const userData = {
-                name: "Daggy",
-                email: "daggy@cd.com",
-                token: "dyuwgdyuwgeyu",
-              };
-              dispatch({ type: "SET_USER", payload: userData });
-              //setToastMessage("Signup failed. Please try again.");
-              //setToastVisible(true);
-              // setTimeout(() => {
-              //   setToastVisible(false);
-              // }, 1500);
-            });
+      fetch(API_BASE_URL + "/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Signup Response:", data);
+          const userData = data?.data;
+          dispatch({ type: "SET_USER", payload: userData });
+        })
+        .catch((error) => {
+          // const userData = response.data?.data;
+          // const userData = {
+          //   name: "Daggy",
+          //   email: "daggy@cd.com",
+          //   token: "dyuwgdyuwgeyu",
+          // };
+          // dispatch({ type: "SET_USER", payload: userData });
+          setToastMessage("Signup failed. Please try again.");
+          setToastVisible(true);
+          setTimeout(() => {
+            setToastVisible(false);
+          }, 1500);
+        });
     }
-
-
   };
 
   return (

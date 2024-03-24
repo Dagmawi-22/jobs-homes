@@ -3,14 +3,15 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
   Modal,
   TextInput,
   Image,
+  StyleSheet,
 } from "react-native";
-import { MaterialIcons, Ionicons } from "@expo/vector-icons";
-import { primary_color } from "../config/config";
+import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
+import { API_BASE_URL, primary_color } from "../config/config";
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
 
 const SelectionButton = ({ option, selected, onSelect }) => {
   return (
@@ -38,14 +39,12 @@ const PostingForm = ({ selectedOption, onSelectBack }) => {
     description: "",
     email: "",
     phone: "",
-    logo: "",
-    coverImage: "",
+    photo: null,
   });
 
   const [image, setImage] = useState(null);
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -53,10 +52,9 @@ const PostingForm = ({ selectedOption, onSelectBack }) => {
       quality: 1,
     });
 
-    console.log(result);
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
+    if (!result.cancelled) {
+      setFormData({ ...formData, photo: result?.assets[0]?.uri });
+      setImage(result?.assets[0]?.uri);
     }
   };
 
@@ -64,36 +62,45 @@ const PostingForm = ({ selectedOption, onSelectBack }) => {
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleSubmit = () => {
-    // Handle form submission
-    // You can access form data from 'formData' state
-    console.log("Form submitted:", formData);
-    // Reset form data
-    setFormData({
-      title: "",
-      price: "",
-      location: "",
-      description: "",
-      email: "",
-      phone: "",
-      logo: "",
-      coverImage: "",
-    });
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${selectedOption}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        alert("Something went wrong");
+        return;
+      }
+
+      const data = await response.json();
+      console.log("Form submitted:", data);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
     <Modal visible={!!selectedOption} animationType="slide">
       <>
+        <TouchableOpacity style={styles.backButton} onPress={onSelectBack}>
+          <MaterialIcons name="arrow-back" size={27} color="#000" />
+        </TouchableOpacity>
         <View style={styles.imageContainer}>
           <Image
-            source={require("../../assets/job.jpg")}
+            source={
+              selectedOption === "job"
+                ? require("../../assets/job.png")
+                : require("../../assets/house.jpg")
+            }
             style={styles.bg}
-            resizeMode="cover"
           />
         </View>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Add a new {selectedOption}</Text>
-          {/* Form fields */}
           {selectedOption === "house" ? (
             <>
               {image ? (
@@ -104,10 +111,10 @@ const PostingForm = ({ selectedOption, onSelectBack }) => {
                 </View>
               )}
 
-              <Ionicons
-                name="add"
-                size={24}
-                color="red"
+              <FontAwesome
+                name="photo"
+                size={20}
+                color="#000"
                 onPress={pickImage}
                 style={styles.editIcon}
               />
@@ -181,7 +188,6 @@ const PostingForm = ({ selectedOption, onSelectBack }) => {
               />
             </>
           )}
-          {/* Submit button */}
           <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
             <Text style={styles.submitButtonText}>Submit</Text>
           </TouchableOpacity>
@@ -224,6 +230,8 @@ const SelectionComponent = ({}) => {
     </>
   );
 };
+
+export default SelectionComponent;
 
 const styles = StyleSheet.create({
   container: {
@@ -269,13 +277,11 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 34,
-    color: "#fff",
+    color: "#000",
     fontWeight: "bold",
-    marginTop: -130,
     textShadowColor: "rgba(0, 0, 0, 0.5)", // Color of the shadow
     textShadowOffset: { width: 2, height: 2 }, // Offset of the shadow
-    textShadowRadius: 5, // Radius of the shadow
-    marginBottom: 50,
+    marginBottom: 10,
   },
 
   backButton: {
@@ -284,43 +290,42 @@ const styles = StyleSheet.create({
     left: 10,
     flexDirection: "row",
     alignItems: "center",
+    zIndex: 9999,
   },
-  backButtonText: {
-    color: primary_color,
-    fontSize: 16,
-    marginLeft: 5,
-  },
+
   image: {
-    width: "100",
-    height: 100,
-    borderRadius: 50,
+    width: "80%",
+    height: 80,
+    borderRadius: 5,
     marginBottom: 20,
   },
   bg: {
     width: "100%",
     height: 200,
     borderRadius: 5,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   imageContainer: {
     width: "100%",
+    marginHorizontal: 20,
     height: 250,
     borderRadius: 5,
-    marginBottom: 20,
+    marginVertical: 30,
     position: "relative",
     overflow: "hidden",
+    marginBottom: -40,
   },
 
   editIcon: {
-    backgroundColor: primary_color,
+    backgroundColor: "#fff",
     elevation: 10,
-    marginLeft: 110,
-    marginTop: -50,
-    color: "#fff",
-    padding: 5,
-    borderRadius: 20,
+    alignSelf: "flex-end",
+    marginRight: "10%",
+    marginTop: -80,
+    padding: 2,
+    borderRadius: 10,
     zIndex: 100,
-    marginBottom: 20,
+    marginBottom: 60,
   },
   input: {
     height: 40,
@@ -354,6 +359,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
+    marginBottom: 5,
   },
   submitButtonText: {
     color: "#fff",
@@ -364,16 +370,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "gray",
-    width: 150,
-    height: 150,
-    borderRadius: 75,
+    backgroundColor: "gray",
+    borderColor: "#f6f6ff",
+    width: "80%",
+    height: 80,
+    borderRadius: 5,
   },
   centeredText: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#333",
+    color: "#fff",
   },
 });
-
-export default SelectionComponent;

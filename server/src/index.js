@@ -14,7 +14,12 @@ const app = express();
 
 dotenv.config();
 
-app.use(cors());
+// Allow requests from any origin, including Expo apps
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 //middlewares
 app.use(express.json());
