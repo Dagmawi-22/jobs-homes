@@ -26,6 +26,16 @@ const HousesList = () => {
     },
   ];
 
+  const dummyHouses = [
+    {
+      id: 1,
+      title: "Lorem Ipsum",
+      price: 123,
+      location: "Addis Ababa",
+      description: "Testing it out",
+    },
+  ];
+
   useEffect(() => {
     fetch(`${API_BASE_URL}/houses`)
       .then((response) => response.json())
@@ -60,7 +70,7 @@ const HousesList = () => {
         onFilterChange={handleFilterChange}
       />
       <FlatList
-        data={houses}
+        data={dummyHouses}
         renderItem={renderHouseItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingVertical: 10 }}
