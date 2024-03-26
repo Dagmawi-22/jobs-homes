@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { primary_color } from "../config/config";
+import { useSelector } from "react-redux";
 
 const companyLogo =
   "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg";
@@ -9,6 +10,9 @@ const coverImage =
   "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg";
 
 const JobCard = ({ job }) => {
+  const user = useSelector((state) => state.user.user);
+  const isOwner = job.user_id === user._id;
+
   return (
     <View style={[styles.container, { marginHorizontal: 30 }]}>
       <View style={styles.coverImageContainer}>
@@ -62,6 +66,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 130,
     marginBottom: 7,
+    opacity: 0.7,
   },
   logoContainer: {
     position: "absolute",
@@ -73,13 +78,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    elevation: 100,
+    // backgroundColor: "rgba(255, 255, 255, 0.7)",
     borderRadius: 10,
   },
   logo: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     marginRight: 10,
   },
   companyName: {

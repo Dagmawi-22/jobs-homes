@@ -29,6 +29,7 @@ const HousesList = () => {
   const dummyHouses = [
     {
       id: 1,
+      user_id: "dgfdwefuyweygy",
       title: "Lorem Ipsum",
       price: 123,
       location: "Addis Ababa",

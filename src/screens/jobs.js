@@ -20,6 +20,7 @@ const searchCriteria = [
 const dummyJobs = [
   {
     id: 1,
+    user_id: "dgfdwefuyweygy",
     title: "Check",
     location: "Addis A",
     description: "A random description for the",

@@ -2,8 +2,11 @@ import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Fontisto, Ionicons } from "@expo/vector-icons";
 import { primary_color } from "../config/config";
+import { useSelector } from "react-redux";
 
 const HouseCard = ({ house, onPress }) => {
+  const user = useSelector((state) => state.user.user);
+  const isOwner = house.user_id === user._id;
   const isEven = house.id % 2 === 0;
 
   const handleCallSeller = () => {
@@ -14,8 +17,21 @@ const HouseCard = ({ house, onPress }) => {
     console.log("Emailing seller...");
   };
 
+  const handleDeleteHouse = () => {
+    console.log("Deleting house...");
+    // Add your logic to delete the house here
+  };
+
   return (
     <View style={styles.container}>
+      {isOwner && (
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={handleDeleteHouse}
+        >
+          <Ionicons name="trash-outline" size={24} color="red" />
+        </TouchableOpacity>
+      )}
       {!isEven ? (
         <View style={styles.infoContainer}>
           <Text style={styles.title}>{house.title}</Text>
@@ -79,6 +95,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 30,
     padding: 10,
+    position: "relative",
   },
   image: {
     width: 100,
@@ -140,6 +157,11 @@ const styles = StyleSheet.create({
   rightArrow: {
     position: "absolute",
     bottom: 5,
+    right: 5,
+  },
+  deleteButton: {
+    position: "absolute",
+    top: 5,
     right: 5,
   },
 });

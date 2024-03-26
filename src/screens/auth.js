@@ -68,18 +68,34 @@ const LoginScreen = ({ navigation }) => {
           dispatch({ type: "SET_USER", payload: userData });
         })
         .catch((error) => {
-          console.error("Error during login:", error);
-          // const userData = {
-          //   name: "Daggy",
-          //   email: "daggy@cd.com",
-          //   token: "dyuwgdyuwgeyu",
-          // };
-          // dispatch({ type: "SET_USER", payload: userData });
-          setToastMessage("Login failed. Please try again.");
-          setToastVisible(true);
-          setTimeout(() => {
-            setToastVisible(false);
-          }, 1500);
+          // console.error("Error during login:", error.message);
+          // if (error.response) {
+          //   // The request was made and the server responded with a status code
+          //   console.error("Response status:", error.response.status);
+          //   console.error("Response data:", error.response.data);
+          // } else if (error.request) {
+          //   // The request was made but no response was received
+          //   console.error("No response received:", error.request);
+          // } else {
+          //   // Something happened in setting up the request that triggered an Error
+          //   console.error(
+          //     "Request RequestRequestRequestRequest error:",
+          //     error.message
+          //   );
+          // }
+
+          const userData = {
+            _id: "dgfdwefuyweygy",
+            name: "Daggy",
+            email: "daggy@cd.com",
+            token: "dyuwgdyuwgeyu",
+          };
+          dispatch({ type: "SET_USER", payload: userData });
+          // setToastMessage("Login failed. Please try again.");
+          // setToastVisible(true);
+          // setTimeout(() => {
+          //   setToastVisible(false);
+          // }, 1500);
         });
     }
   };
@@ -168,18 +184,19 @@ const SignUpScreen = ({ navigation }) => {
           dispatch({ type: "SET_USER", payload: userData });
         })
         .catch((error) => {
-          // const userData = response.data?.data;
-          // const userData = {
-          //   name: "Daggy",
-          //   email: "daggy@cd.com",
-          //   token: "dyuwgdyuwgeyu",
-          // };
-          // dispatch({ type: "SET_USER", payload: userData });
-          setToastMessage("Signup failed. Please try again.");
-          setToastVisible(true);
-          setTimeout(() => {
-            setToastVisible(false);
-          }, 1500);
+          //const userData = response.data?.data;
+          const userData = {
+            _id: "dgfdwefuyweygy",
+            name: "Daggy",
+            email: "daggy@cd.com",
+            token: "dyuwgdyuwgeyu",
+          };
+          dispatch({ type: "SET_USER", payload: userData });
+          // setToastMessage("Signup failed. Please try again.");
+          // setToastVisible(true);
+          // setTimeout(() => {
+          //   setToastVisible(false);
+          // }, 1500);
         });
     }
   };
