@@ -96,6 +96,9 @@ const HousesList = () => {
         renderItem={renderHouseItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingVertical: 10 }}
+        ListEmptyComponent={
+          <Text style={styles.emptyListText}>No houses found</Text>
+        }
       />
 
       {modalVisible && <View style={styles.overlay} />}
@@ -143,6 +146,12 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
+  },
+  emptyListText: {
+    textAlign: "center",
+    marginTop: 50,
+    fontSize: 18,
+    color: "gray",
   },
   bottomSheet: {
     backgroundColor: "#fff",

@@ -114,6 +114,19 @@ const Jobs = () => {
         data={filteredJobs}
         renderItem={renderJobItem}
         keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={{ paddingVertical: 10 }}
+        ListEmptyComponent={
+          <Text
+            style={{
+              textAlign: "center",
+              marginTop: 50,
+              fontSize: 18,
+              color: "gray",
+            }}
+          >
+            No houses found
+          </Text>
+        }
       />
     </View>
   );
