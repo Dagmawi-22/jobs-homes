@@ -7,6 +7,9 @@ const houseSchema = new mongoose.Schema(
       trim: true,
       required: [true, "Name is required"],
     },
+    user_id: {
+      type: String,
+    },
     price: {
       type: Number,
       required: [true, "Please enter your price"],

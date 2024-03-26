@@ -7,6 +7,9 @@ const jobSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
+    user_id: {
+      type: String,
+    },
     title: {
       type: String,
       trim: true,

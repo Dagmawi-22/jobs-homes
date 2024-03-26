@@ -1,8 +1,5 @@
 import express from "express";
 import dotenv from "dotenv";
-import cookieParser from "cookie-parser";
-import bodyParser from "body-parser";
-import morgan from "morgan";
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
 import connectDB from "./database/database.js";
 import userRoutes from "./routes/user.js";
@@ -14,19 +11,12 @@ const app = express();
 
 dotenv.config();
 
-// Allow requests from any origin, including Expo apps
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+// Allow requests from any origin
+app.use(cors());
 
 //middlewares
 app.use(express.json());
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(morgan("dev"));
+app.use(express.urlencoded({ extended: true }));
 
 //Routes
 app.get("/", (req, res) => {

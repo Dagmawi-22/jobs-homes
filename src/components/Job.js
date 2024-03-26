@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { primary_color } from "../config/config";
+import { useSelector } from "react-redux";
 
 const companyLogo =
   "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg";
@@ -9,6 +10,9 @@ const coverImage =
   "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg";
 
 const JobCard = ({ job }) => {
+  const user = useSelector((state) => state.user.user);
+  const isOwner = job.user_id === user._id;
+
   return (
     <View style={[styles.container, { marginHorizontal: 30 }]}>
       <View style={styles.coverImageContainer}>
@@ -19,8 +23,11 @@ const JobCard = ({ job }) => {
         </View>
       </View>
       <View style={styles.section}>
-        <Text style={styles.title}>
-          <Feather name="briefcase" style={styles.icon} /> {job.title}
+        <Text style={styles.title}>{job.title}</Text>
+      </View>
+      <View style={styles.section}>
+        <Text style={styles.location}>
+          <Feather name="briefcase" style={styles.icon} /> {job.category}
         </Text>
       </View>
       <View style={styles.section}>
@@ -62,6 +69,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 130,
     marginBottom: 7,
+    opacity: 0.7,
   },
   logoContainer: {
     position: "absolute",
@@ -73,19 +81,28 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    elevation: 100,
+    // backgroundColor: "rgba(255, 255, 255, 0.7)",
     borderRadius: 10,
   },
   logo: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     marginRight: 10,
   },
   companyName: {
-    fontSize: 18,
+    fontSize: 25,
     fontWeight: "bold",
+    color: "#fff",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    elevation: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3,
   },
+
   section: {
     paddingHorizontal: 15,
     marginBottom: 10,

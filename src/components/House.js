@@ -2,8 +2,11 @@ import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Fontisto, Ionicons } from "@expo/vector-icons";
 import { primary_color } from "../config/config";
+import { useSelector } from "react-redux";
 
 const HouseCard = ({ house, onPress }) => {
+  const user = useSelector((state) => state.user.user);
+  const isOwner = house.user_id === user._id;
   const isEven = house.id % 2 === 0;
 
   const handleCallSeller = () => {
@@ -14,12 +17,25 @@ const HouseCard = ({ house, onPress }) => {
     console.log("Emailing seller...");
   };
 
+  const handleDeleteHouse = () => {
+    console.log("Deleting house...");
+    // Add your logic to delete the house here
+  };
+
   return (
     <View style={styles.container}>
+      {isOwner && (
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={handleDeleteHouse}
+        >
+          <Ionicons name="trash-outline" size={24} color="red" />
+        </TouchableOpacity>
+      )}
       {!isEven ? (
         <View style={styles.infoContainer}>
           <Text style={styles.title}>{house.title}</Text>
-          <Text style={styles.price}>{house.price}</Text>
+          <Text style={styles.price}>$ {house.price}</Text>
           <Text style={styles.location}>{house.location}</Text>
           <Text style={styles.description}>{house.description}</Text>
           <View style={styles.buttonsContainer}>
@@ -35,12 +51,17 @@ const HouseCard = ({ house, onPress }) => {
           </View>
         </View>
       ) : (
-        <Image source={{ uri: house.image }} style={styles.image} />
+        <Image
+          source={{
+            uri: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+          }}
+          style={styles.image}
+        />
       )}
       {isEven ? (
         <View style={styles.infoContainer}>
           <Text style={styles.title}>{house.title}</Text>
-          <Text style={styles.price}>{house.price}</Text>
+          <Text style={styles.price}>$ {house.price}</Text>
           <Text style={styles.location}>{house.location}</Text>
           <Text style={styles.description}>{house.description}</Text>
           <View style={styles.buttonsContainer}>
@@ -56,7 +77,12 @@ const HouseCard = ({ house, onPress }) => {
           </View>
         </View>
       ) : (
-        <Image source={{ uri: house.image }} style={styles.image} />
+        <Image
+          source={{
+            uri: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+          }}
+          style={styles.image}
+        />
       )}
       <TouchableOpacity
         style={styles.rightArrow}
@@ -78,7 +104,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignItems: "center",
     marginHorizontal: 30,
-    padding: 10,
+    padding: 25,
+    position: "relative",
   },
   image: {
     width: 100,
@@ -140,6 +167,11 @@ const styles = StyleSheet.create({
   rightArrow: {
     position: "absolute",
     bottom: 5,
+    right: 5,
+  },
+  deleteButton: {
+    position: "absolute",
+    top: 5,
     right: 5,
   },
 });

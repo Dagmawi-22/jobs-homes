@@ -14,47 +14,67 @@ import Heading from "../components/Heading";
 import { API_BASE_URL } from "../config/config";
 
 const HousesList = () => {
-  const [houses, setHouses] = useState([]);
   const [selectedHouse, setSelectedHouse] = useState(null);
   const [checkedOptions, setCheckedOptions] = useState([]);
+  const [maxPrice, setMaxPrice] = useState(null); // State to store the selected maximum price
   const [modalVisible, setModalVisible] = useState(false);
 
   const searchCriteria = [
     {
-      criteria: "Price",
-      subCriteria: ["100-1000", "1001-10000", "10000+"],
+      criteria: "Maximum Price",
+      subCriteria: ["100000", "20000", "30000"],
     },
   ];
 
   const dummyHouses = [
     {
       id: 1,
-      title: "Lorem Ipsum",
-      price: 123,
-      location: "Addis Ababa",
-      description: "Testing it out",
+      user_id: "abc123",
+      title: "Spacious Family Home with Stunning Views",
+      price: 250000,
+      location: "Los Angeles, California",
+      description:
+        "Beautiful family home located in the heart of Los Angeles with breathtaking views of the city skyline.",
+      image: "https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg",
+    },
+    {
+      id: 2,
+      user_id: "def456",
+      title: "Modern Downtown Loft with Rooftop Terrace",
+      price: 180000,
+      location: "New York City, New York",
+      description:
+        "Sleek and stylish loft apartment in the bustling downtown area of New York City. Features a spacious rooftop terrace perfect for entertaining.",
+      image: "https://images.pexels.com/photos/259962/pexels-photo-259962.jpeg",
     },
   ];
 
+  const [houses, setHouses] = useState(dummyHouses);
+
+  const applyFilters = () => {
+    let filteredData = [...dummyHouses];
+    if (maxPrice) {
+      filteredData = filteredData.filter((house) => house.price <= maxPrice);
+    }
+    setHouses(filteredData);
+  };
+
   useEffect(() => {
-    fetch(`${API_BASE_URL}/houses`)
-      .then((response) => response.json())
-      .then((data) => {
-        setHouses(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+    applyFilters();
+  }, [maxPrice]);
+
+  const handleFilterChange = (checkedOptions) => {
+    setCheckedOptions(checkedOptions);
+    const selectedPrice = parseInt(
+      checkedOptions.find((option) => option.criteria === "Maximum Price")
+        ?.subCriteria
+    );
+    setMaxPrice(selectedPrice);
+  };
 
   const renderHouseItem = ({ item }) => (
     <HouseCard house={item} onPress={setSelectedHouse} />
   );
-
-  const handleFilterChange = (checkedOptions) => {
-    setCheckedOptions(checkedOptions);
-    console.log("Checked Options:", checkedOptions);
-  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -70,7 +90,7 @@ const HousesList = () => {
         onFilterChange={handleFilterChange}
       />
       <FlatList
-        data={dummyHouses}
+        data={houses}
         renderItem={renderHouseItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingVertical: 10 }}
