@@ -24,7 +24,7 @@
 ## Samples
 
 ![image](https://github.com/Dagmawi-22/jobs-homes/assets/109204719/ffe0a855-a0ba-429e-af8d-e3fc369b6ca8)
-![image](https://github.com/Dagmawi-22/jobs-homes/assets/109204719/be436860-a4b4-4b15-8b79-e8f40fa2467a)
+![image](https://github.com/Dagmawi-22/jobs-homes/assets/109204719/1f751069-dfb1-49ee-8376-5daaccbc11cb)
 ![image](https://github.com/Dagmawi-22/jobs-homes/assets/109204719/ee1ee41f-13eb-4c6a-87ff-de9e775be438)
 ![image](https://github.com/Dagmawi-22/jobs-homes/assets/109204719/752ee4c1-121b-4594-b24f-52f7570bdfe1)
 ![image](https://github.com/Dagmawi-22/jobs-homes/assets/109204719/9bb00d4b-caef-4984-b501-781ccbd4720e)
