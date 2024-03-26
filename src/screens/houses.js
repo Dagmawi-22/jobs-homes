@@ -6,7 +6,9 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  Image,
 } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 import HouseCard from "../components/House";
 import FilterBar from "../components/Filterbar";
 import Header from "../components/Header";
@@ -16,7 +18,7 @@ import { API_BASE_URL } from "../config/config";
 const HousesList = () => {
   const [selectedHouse, setSelectedHouse] = useState(null);
   const [checkedOptions, setCheckedOptions] = useState([]);
-  const [maxPrice, setMaxPrice] = useState(null); // State to store the selected maximum price
+  const [maxPrice, setMaxPrice] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
   const searchCriteria = [
@@ -96,10 +98,8 @@ const HousesList = () => {
         contentContainerStyle={{ paddingVertical: 10 }}
       />
 
-      {/* Black overlay when modal is open */}
       {modalVisible && <View style={styles.overlay} />}
 
-      {/* Modal for house details */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -112,8 +112,26 @@ const HousesList = () => {
           onPress={() => setSelectedHouse(null)}
         >
           <View style={styles.bottomSheet}>
+            <View style={styles.line}></View>
+            <Image
+              source={{ uri: selectedHouse?.image }}
+              style={styles.houseImage}
+            />
             <Text style={styles.modalText}>{selectedHouse?.title}</Text>
-            {/* Add more details or actions here */}
+            <View style={styles.iconTextContainer}>
+              <FontAwesome name="dollar" size={24} color="gray" />
+              <Text style={styles.priceText}>${selectedHouse?.price}</Text>
+            </View>
+            <View style={styles.iconTextContainer}>
+              <FontAwesome name="map-marker" size={24} color="gray" />
+              <Text style={styles.locationText}>{selectedHouse?.location}</Text>
+            </View>
+            <View style={styles.iconTextContainer}>
+              <FontAwesome name="info" size={24} color="gray" />
+              <Text style={styles.descriptionText}>
+                {selectedHouse?.description}
+              </Text>
+            </View>
           </View>
         </TouchableOpacity>
       </Modal>
@@ -134,11 +152,44 @@ const styles = StyleSheet.create({
     padding: 20,
     minHeight: 500,
   },
+  line: {
+    alignSelf: "center",
+    backgroundColor: "gray",
+    borderRadius: 5,
+    height: 5,
+    width: 100,
+    marginVertical: 10,
+    marginBottom: 30,
+    marginTop: -10,
+  },
   modalText: {
     marginBottom: 15,
     textAlign: "center",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  iconTextContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  priceText: {
+    fontSize: 16,
+    marginLeft: 10,
+  },
+  locationText: {
+    fontSize: 16,
+    marginLeft: 10,
+  },
+  descriptionText: {
+    fontSize: 16,
+    marginLeft: 10,
+  },
+  houseImage: {
+    width: "100%",
+    height: 200,
+    marginBottom: 10,
+    borderRadius: 10,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
