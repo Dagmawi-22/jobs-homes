@@ -23,8 +23,11 @@ const JobCard = ({ job }) => {
         </View>
       </View>
       <View style={styles.section}>
-        <Text style={styles.title}>
-          <Feather name="briefcase" style={styles.icon} /> {job.title}
+        <Text style={styles.title}>{job.title}</Text>
+      </View>
+      <View style={styles.section}>
+        <Text style={styles.location}>
+          <Feather name="briefcase" style={styles.icon} /> {job.category}
         </Text>
       </View>
       <View style={styles.section}>
@@ -89,9 +92,17 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   companyName: {
-    fontSize: 18,
+    fontSize: 25,
     fontWeight: "bold",
+    color: "#fff",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    elevation: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3,
   },
+
   section: {
     paddingHorizontal: 15,
     marginBottom: 10,

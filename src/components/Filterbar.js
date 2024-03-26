@@ -16,12 +16,12 @@ const FilterBar = ({ searchCriteria, onFilterChange }) => {
       ? filterCriteria.filter((item) => item !== criteria)
       : [...filterCriteria, criteria];
     setFilterCriteria(updatedCriteria);
-    onFilterChange(updatedCriteria); // Call the callback function with updated checked options
+    onFilterChange(updatedCriteria);
   };
 
   const clearFilters = () => {
     setFilterCriteria([]);
-    onFilterChange([]); // Call the callback function with an empty array to clear filters
+    onFilterChange([]);
   };
 
   const hasFilters = filterCriteria.length > 0;
@@ -47,14 +47,12 @@ const FilterBar = ({ searchCriteria, onFilterChange }) => {
                 <TouchableOpacity
                   key={subIndex}
                   style={styles.filterItem}
-                  onPress={() =>
-                    handleFilterCriteriaChange(item + "|" + subItem)
-                  }
+                  onPress={() => handleFilterCriteriaChange(subItem)}
                 >
                   <Text>{subItem}</Text>
                   <Feather
                     name={
-                      filterCriteria.includes(item + "|" + subItem)
+                      filterCriteria.includes(subItem)
                         ? "check-square"
                         : "square"
                     }
