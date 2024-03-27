@@ -16,7 +16,7 @@
 #### -> git clone https://github.com/Dagmawi-22/jobs-homes
 #### -> cd jobs-homes
 #### -> cd /server
-#### -> yarn dev / npm run dev
+#### -> yarn dev or npm run dev
 #### -> cd ../
 #### -> npx expo start -c
 #### -> Scan the QR Code with your phone camera/Expo app
